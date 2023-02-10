@@ -1,24 +1,47 @@
-from tkinter import *
+import time
+import tkinter as tk
 from tkinter import messagebox
-from random import randrange
+import random
 
 
-def dicevalue():
-    button1["text"] = "Next"
-    label1 = Label(root, text=randrange(1, 7))
-    label1.grid(row=0, column=2)
+def roll_dice():
+    roll_animation()
+    values = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]
+    dice_value = random.choice(values)
+    result_label.config(text=str(dice_value))
+    value_button.config(text=str(values.index(dice_value) + 1))
+    roll_button.config(state="normal")
+    root.update()
 
 
-def exit():
-    msg = messagebox.askyesno("Exit", "Do you want to exit ?")
-    if msg:
-        root.destroy()
+def roll_animation():
+    for i in range(5):
+        dice_value = random.choice(["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"])
+        result_label.config(text=str(dice_value))
+        value_button.config(text="Rolling...")
+        roll_button.config(state="disabled")
+        root.update()
+        time.sleep(0.2)
 
 
-root = Tk()
+root = tk.Tk()
 root.title("Dice Simulator")
-button1 = Button(root, text="Start", command=dicevalue)
-button1.grid(row=1, column=1)
-button2 = Button(root, text="Exit", command=exit)
-button2.grid(row=1, column=3)
+root.resizable(False, False)
+
+name_label = tk.Label(root, text="Dice Simulator", font=("Helvetica", 20, "bold"))
+name_label.pack(padx=5, pady=5)
+
+result_label = tk.Label(root, text="", font=("Helvetica", 50))
+result_label.pack()
+
+value_button = tk.Label(root, text="", font=("Helvetica", 20))
+value_button.pack()
+
+roll_button = tk.Button(root, text="Roll the Dice", command=roll_dice)
+roll_button.pack(pady=5)
+
+exit_button = tk.Button(root, text="Exit", command=lambda: messagebox.askyesno("Exit", "Do you want to exit ?",
+                                                                               parent=root) and root.destroy())
+exit_button.pack(pady=5)
+
 root.mainloop()
